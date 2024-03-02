@@ -47,8 +47,8 @@ def embedding_byte_meta(
         torch.float32,
     ], f"Expecting weight_scales to be of dtype in [torch.float16, torch.float32], but got {weight_scales.dtype}"
     assert (
-        weight_scales.dim() == 1
-    ), f"Expecting weight_scales tensor to have dim()==1, but found {weight_scales.dim()}"
+        weight_scales.dim() <= 2
+    ), f"Expecting weight_scales tensor to have dim()<=2, but found {weight_scales.dim()}"
     assert weight_scales.size(0) == weight.size(
         0
     ), f"Expecting weight and scale tensor to have same number of rows, but found {weight.size()} and {weight_scales.size()}"
@@ -57,8 +57,8 @@ def embedding_byte_meta(
         weight_zero_points is None or weight_zero_points.dtype == weight_scales.dtype
     ), "Expecting weight_zero_points to be None or have same dtype as weight_scales"
     assert (
-        weight_zero_points is None or weight_zero_points.dim() == 1
-    ), f"Expecting weight_zero_points tensor to be None or have dim()==1, but found {weight_zero_points.dim()}"
+        weight_zero_points is None or weight_zero_points.dim() == weight_scales.dim()
+    ), f"Expecting weight_zero_points tensor to be None or have dim() same as weight scales, but found {weight_zero_points.dim()}"
     assert weight_zero_points is None or weight_zero_points.size(0) == weight.size(
         0
     ), f"Expecting weight_zero_points tensor to be None or have same number of rows as weights, but found {weight.size()} and {weight_zero_points.size()}"
